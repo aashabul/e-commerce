@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+/* Override body defaults */
+body {
+  @apply bg-white text-black font-sans;
+}
+
+/* Optional: support dark mode */
+@media (prefers-color-scheme: dark) {
+  body {
+    @apply bg-black text-white;
+  }
+}
