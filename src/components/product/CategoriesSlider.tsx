@@ -15,7 +15,7 @@ const categories = [
 
 export default function CategoriesSlider() {
   return (
-    <div className="p-6">
+    <div className="w-full md:w-4/5 mx-auto px-4 py-6">
       <h2 className="text-2xl font-bold mb-4">Shop by Category</h2>
       <Swiper
         modules={[Navigation]}
@@ -29,13 +29,17 @@ export default function CategoriesSlider() {
       >
         {categories.map((cat) => (
           <SwiperSlide key={cat.id}>
-            <div className="border rounded-lg p-4 flex flex-col items-center hover:shadow-lg cursor-pointer">
+            <div className="relative group cursor-pointer overflow-hidden rounded-xl shadow-md">
+              {/* Image */}
               <img
                 src={cat.img}
                 alt={cat.name}
-                className="w-32 h-32 object-cover rounded"
+                className="w-full h-40 sm:h-48 md:h-56 object-cover transform group-hover:scale-105 transition duration-300"
               />
-              <p className="mt-2 font-semibold">{cat.name}</p>
+              {/* Overlay text */}
+              <div className="absolute bottom-0 left-0 w-full bg-black/50 text-white text-center py-2 backdrop-blur-sm">
+                <p className="font-semibold text-sm sm:text-base">{cat.name}</p>
+              </div>
             </div>
           </SwiperSlide>
         ))}

@@ -14,6 +14,11 @@ const menuItems = [
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+  const toggleDropdown = (name: string) => {
+    setOpenDropdown(openDropdown === name ? null : name);
+  };
 
   return (
     <header className="w-full shadow bg-white sticky top-0 z-50">
@@ -94,82 +99,87 @@ export default function Header() {
       </nav>
 
       {/* Mobile Menu */}
-<div
-  className={`fixed top-0 right-0 h-full w-4/5 max-w-xs bg-gray-100 shadow-lg transform transition-transform duration-300 z-50 ${
-    mobileMenuOpen ? "translate-x-0" : "translate-x-full"
-  }`}
->
-  {/* Close button inside mobile menu */}
-  <div className="flex justify-end p-4">
-    <button onClick={() => setMobileMenuOpen(false)}>
-      <X className="w-6 h-6 text-gray-700" />
-    </button>
-  </div>
-
-  {/* Search bar at the top */}
-  <div className="p-4">
-    <input
-      type="text"
-      placeholder="Search for products..."
-      className="w-full border border-gray-300 rounded-full px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-    />
-  </div>
-
-  <ul className="px-4 space-y-2">
-    {menuItems.map((item) => (
-      <li key={item.name} className="border-b border-gray-200 pb-2">
-        <div className="flex justify-between items-center py-2">
-          <Link
-            href={item.href}
-            className="font-medium text-gray-700 hover:text-blue-600"
-          >
-            {item.name}
-          </Link>
-          {item.dropdown && <ChevronDown className="w-4 h-4" />}
+      <div
+        className={`fixed top-0 right-0 h-full w-4/5 max-w-xs bg-gray-100 shadow-lg transform transition-transform duration-300 z-50 ${
+          mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        {/* Close button */}
+        <div className="flex justify-end p-4">
+          <button onClick={() => setMobileMenuOpen(false)}>
+            <X className="w-6 h-6 text-gray-700" />
+          </button>
         </div>
-        {/* Mobile dropdown */}
-        {item.dropdown && (
-          <ul className="mt-1 ml-4 space-y-1">
-            {item.dropdown.map((sub) => (
-              <li key={sub}>
-                <Link
-                  href="#"
-                  className="block text-gray-600 hover:text-blue-600 py-1"
-                >
-                  {sub}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-      </li>
-    ))}
 
-    {/* Cart row */}
-    <li className="py-2 flex items-center space-x-2">
-      <ShoppingCart className="w-6 h-6 text-gray-700" />
-      <span className="text-gray-700 font-medium">Cart</span>
-    </li>
+        {/* Search bar */}
+        <div className="p-4">
+          <input
+            type="text"
+            placeholder="Search for products..."
+            className="w-full border border-gray-300 rounded-full px-4 py-3 text-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
 
-    {/* User row */}
-    <li className="py-2 flex items-center space-x-2">
-      <User className="w-6 h-6 text-gray-700" />
-      <span className="text-gray-700 font-medium">Aashab</span>
-    </li>
-  </ul>
-</div>
+        {/* Menu Items */}
+        <ul className="px-4 space-y-4">
+          {menuItems.map((item) => (
+            <li key={item.name}>
+              {/* Parent Link */}
+              <div
+                className="flex justify-between items-center text-lg font-medium text-gray-700 hover:text-blue-600 py-3 cursor-pointer"
+                onClick={() => item.dropdown && toggleDropdown(item.name)}
+              >
+                <span>{item.name}</span>
+                {item.dropdown && (
+                  <ChevronDown
+                    className={`w-5 h-5 transition-transform duration-300 ${
+                      openDropdown === item.name ? "rotate-180" : ""
+                    }`}
+                  />
+                )}
+              </div>
 
+              {/* Dropdown */}
+              {item.dropdown && openDropdown === item.name && (
+                <ul className="ml-4 space-y-2">
+                  {item.dropdown.map((sub) => (
+                    <li key={sub}>
+                      <Link
+                        href="#"
+                        className="block text-gray-600 hover:text-blue-600 py-2 text-base"
+                      >
+                        {sub}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
 
+          {/* Cart row */}
+          <li className="py-3 flex items-center space-x-2 text-lg font-medium border-t border-gray-300">
+            <ShoppingCart className="w-6 h-6 text-gray-700" />
+            <span>Cart</span>
+          </li>
 
-      {/* Overlay when mobile menu is open */}
+          {/* User row */}
+          <li className="py-3 flex items-center space-x-2 text-lg font-medium border-t border-gray-300">
+            <User className="w-6 h-6 text-gray-700" />
+            <span>Aashab</span>
+          </li>
+        </ul>
+      </div>
+
+      {/* Overlay */}
       {mobileMenuOpen && (
-        <div
-  className="fixed inset-0 z-40"
-  style={{ backgroundColor: 'rgba(0,0,0,0.8)' }}
-  onClick={() => setMobileMenuOpen(false)}
-/>
+      <div
+        className="fixed inset-0 z-40"
+        style={{ backgroundColor: 'rgba(0,0,0,0.7)' }} // 10% opacity
+        onClick={() => setMobileMenuOpen(false)}
+        />
+        )}
 
-      )}
     </header>
   );
 }

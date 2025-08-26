@@ -13,7 +13,7 @@ const slides = [
 
 export default function HeroSlider() {
   return (
-    <div className="w-full h-[400px] md:h-[600px]">
+    <div className="w-full h-[200px] md:h-[600px]">
       <Swiper
         modules={[Autoplay, Pagination]}
         autoplay={{ delay: 3000, disableOnInteraction: false }}
