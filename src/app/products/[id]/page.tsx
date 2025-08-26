@@ -1,5 +1,5 @@
 interface ProductPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 const products = [
@@ -10,8 +10,18 @@ const products = [
   { id: "5", name: "Monitor", price: 300, description: "27-inch 4K monitor for productivity." },
 ];
 
-export default function ProductPage({ params }: ProductPageProps) {
-  const product = products.find((p) => p.id === params.id);
+// ✅ Tell Next.js which params to pre-render
+export async function generateStaticParams() {
+  return products.map((product) => ({ id: product.id }));
+}
+
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const product = products.find((p) => p.id === id);
 
   if (!product) {
     return <p className="p-6">Product not found.</p>;
